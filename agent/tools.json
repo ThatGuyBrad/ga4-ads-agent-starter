@@ -1,0 +1,64 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_ga4_report",
+        "description": "Run a GA4 report via the backend proxy.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "propertyId": { "type": "string" },
+            "metrics": { "type": "array", "items": { "type": "string" } },
+            "dimensions": { "type": "array", "items": { "type": "string" } },
+            "dateRange": {
+              "type": "object",
+              "properties": {
+                "startDate": { "type": "string" },
+                "endDate": { "type": "string" }
+              }
+            },
+            "filters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": { "type": "string" },
+                  "op": { "type": "string", "enum": ["EXACT", "CONTAINS", "REGEX"] },
+                  "value": { "type": "string" }
+                },
+                "required": ["field", "op", "value"]
+              }
+            },
+            "limit": { "type": "number" }
+          },
+          "required": ["propertyId", "metrics"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_google_ads_report",
+        "description": "Run a Google Ads GAQL query via the backend proxy.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "customerId": { "type": "string", "description": "Google Ads Customer ID without dashes" },
+            "gaql": { "type": "string", "description": "Optional GAQL. If omitted, use template." },
+            "template": { "type": "string", "description": "Template key on backend." },
+            "dateRange": {
+              "type": "object",
+              "properties": {
+                "startDate": { "type": "string" },
+                "endDate": { "type": "string" }
+              }
+            }
+          },
+          "required": ["customerId"]
+        }
+      }
+    }
+  ],
+  "instructions": "You are a marketing analytics assistant. Translate the user's plain English into GA4/Ads requests using known metrics and dimensions. Prefer friendly synonyms: sessions, users, conversions, conversion rate, CPC, CPA, ROAS. If the user mentions 'organic', use sessionDefaultChannelGroup=Organic Search. Always show a short numeric summary and a compact table in your response."
+}
